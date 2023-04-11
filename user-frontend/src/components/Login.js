@@ -1,9 +1,8 @@
 import React, { useState, useContext } from "react";
 import Button from "react-bootstrap/Button";
+import { useNavigate } from "react-router";
 import Form from "react-bootstrap/Form";
 import Container from 'react-bootstrap/Container';
-import { CognitoUser, AuthenticationDetails } from "amazon-cognito-identity-js";
-import UserPool from "../UserPool";
 import { AccountContext } from "./Account";
 
 const Login = () => {
@@ -13,12 +12,14 @@ const Login = () => {
 
     const { authenticate } = useContext(AccountContext);
 
+    let navigate = useNavigate();
+
     const onSubmit = (event) => {
         event.preventDefault();
 
         authenticate(email, password)
             .then(data => {
-                console.log("Logged in!", data);
+                navigate(`/home`);
             })
             .catch(err => {
                 setSuccess(err.message);

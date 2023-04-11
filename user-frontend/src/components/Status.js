@@ -13,7 +13,7 @@ const Status = () => {
         });
     }, []);
 
-    return <div>{status ? <button onClick={logout}>Log out</button> : "Please log in"}</div>
+    // return <div>{status ? <button onClick={logout}>Log out</button> : "Please log in"}</div>
 };
 
 export default Status;

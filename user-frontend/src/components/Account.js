@@ -31,14 +31,12 @@ const Account = (props) => {
 
             user.authenticateUser(authDetails, {
                 onSuccess: (data) => {
-                    console.log("On success: ", data);
                     resolve(data);
                 },
                 onFailure: (err) => {
                     reject(err);
                 },
                 newPasswordRequired: (data) => {
-                    console.log(data);
                     resolve(data);
                 },
             });
