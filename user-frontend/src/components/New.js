@@ -28,17 +28,19 @@ const New = () => {
     const onSubmit = (event) => {
         event.preventDefault();
         console.log(files);
+        var fileLength = 0;
         if (files) {
             setUploadSuccess("You have uploaded file(s).");
+            fileLength = files.length;
         } else {
             setUploadSuccess("No file has been uploaded.");
         }
 
         const submission = {
-            "title": title,
+            "title": title.trim(),
             "location": location,
-            "description": description,
-            "numImages": files.length,
+            "description": description.trim(),
+            "numImages": fileLength,
         }
         console.log(submission);
 
