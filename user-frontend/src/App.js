@@ -8,8 +8,7 @@ import Status from "./components/Status";
 import Start from "./components/Start";
 import New from "./components/New";
 import Home from "./components/Home";
-
-var AWS = require('aws-sdk/dist/aws-sdk-react-native');
+import PrivateRoutes from "./components/PrivateRoutes";
 
 const App = () => {
   return (
@@ -17,11 +16,13 @@ const App = () => {
       <Status />
       <BrowserRouter>
         <Routes>
+          <Route element={<PrivateRoutes/>}>
+            <Route path="/home" element={<Home />}/>
+            <Route path="/new" element={<New />}/>
+          </Route> 
           <Route path="/" element={<Start />}/>
           <Route path="/signup" element={<Signup />}/>
           <Route path="/login" element={<Login />}/>
-          <Route path="/new" element={<New />}/>
-          <Route path="/home" element={<Home />}/>
         </Routes>
       </BrowserRouter>
     </Account>

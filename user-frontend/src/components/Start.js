@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import Button from "react-bootstrap/Button";
-import Status from "./Status";
 
 const Start = () => {
     let navigate = useNavigate();

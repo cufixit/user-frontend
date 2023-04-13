@@ -1,10 +1,11 @@
-import React, { createContext } from "react";
+import React, { createContext, useState } from "react";
 import { CognitoUser, AuthenticationDetails } from "amazon-cognito-identity-js";
 import Pool from "../UserPool";
 
 const AccountContext = createContext();
 
 const Account = (props) => {
+    const [setAuthenticated] = useState(false);
     const getSession = async () => {
         return await new Promise((resolve, reject) => {
             const user = Pool.getCurrentUser();
@@ -12,9 +13,11 @@ const Account = (props) => {
                 user.getSession((err, session) => {
                     if (err) {
                         reject(err);
+                        setAuthenticated(false);
                     }
                     else {
                         resolve(session);
+                        setAuthenticated(true);
                     }
                 });
             } else {
@@ -47,6 +50,7 @@ const Account = (props) => {
         const user = Pool.getCurrentUser();
         if (user) {
             user.signOut();
+            window.location.href = "/login";
         }
     }
 
