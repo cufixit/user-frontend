@@ -19,6 +19,7 @@ const Login = () => {
 
         authenticate(email, password)
             .then(data => {
+                console.log(data);
                 navigate(`/home`);
             })
             .catch(err => {

@@ -9,6 +9,8 @@ import Start from "./components/Start";
 import New from "./components/New";
 import Home from "./components/Home";
 
+var AWS = require('aws-sdk/dist/aws-sdk-react-native');
+
 const App = () => {
   return (
     <Account>
