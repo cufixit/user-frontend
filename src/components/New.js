@@ -5,12 +5,12 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { AccountContext } from "./AccountContext";
-// import AWS from 'aws-sdk';
-// import apigClientFactory from '../sdk/apigClient';
+import apigClient from "../ApigClient";
 
 const New = () => {
-  // var sdk = apigClientFactory.newClient();
   const { session } = useContext(AccountContext);
+
+  const axios = require("axios").default;
 
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
@@ -19,13 +19,30 @@ const New = () => {
   const [files, setFiles] = useState();
   const [uploadSuccess, setUploadSuccess] = useState("");
 
-  const onSubmit = (event) => {
+  const uploadFile = async (file, imageUrl) => {
+    file.constructor = () => file;
+    var reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const response = await axios({
+          method: "PUT",
+          url: imageUrl,
+          body: file,
+          headers: { "Content-Type": file.type },
+        });
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    reader.readAsBinaryString(file);
+  };
+
+  const onSubmit = async (event) => {
     event.preventDefault();
     console.log(files);
-    var fileLength = 0;
     if (files) {
       setUploadSuccess("You have uploaded file(s).");
-      fileLength = files.length;
     } else {
       setUploadSuccess("No file has been uploaded.");
     }
@@ -34,11 +51,25 @@ const New = () => {
       title: title.trim(),
       location: location,
       description: description.trim(),
-      numImages: fileLength,
+      images: files ? Array.from(files).map((file) => file.name) : [],
     };
     console.log(submission);
 
-    // sdk.reportPost();
+    try {
+      const response = await apigClient.invokeApi(
+        {},
+        "/reports",
+        "POST",
+        { headers: { Authorization: session["idToken"]["jwtToken"] } },
+        submission
+      );
+      console.log(response);
+      response["data"]["imageUrls"].forEach((imageUrl, i) => {
+        uploadFile(files[i], imageUrl);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
