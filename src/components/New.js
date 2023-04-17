@@ -20,27 +20,25 @@ const New = () => {
   const [uploadSuccess, setUploadSuccess] = useState("");
 
   const uploadFile = async (file, imageUrl) => {
-    file.constructor = () => file;
-    var reader = new FileReader();
-    reader.onload = async () => {
-      try {
-        const response = await axios({
-          method: "PUT",
-          url: imageUrl,
-          body: file,
-          headers: { "Content-Type": file.type },
-        });
-        console.log(response);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    reader.readAsBinaryString(file);
+    const formData = new FormData();
+    Object.keys(imageUrl.fields).forEach((key) => {
+      formData.append(key, imageUrl.fields[key]);
+    });
+    formData.append("file", file);
+    try {
+      const response = await axios.post(imageUrl.url, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    console.log(files);
     if (files) {
       setUploadSuccess("You have uploaded file(s).");
     } else {
@@ -53,7 +51,6 @@ const New = () => {
       description: description.trim(),
       images: files ? Array.from(files).map((file) => file.name) : [],
     };
-    console.log(submission);
 
     try {
       const response = await apigClient.invokeApi(
