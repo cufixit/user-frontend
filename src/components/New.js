@@ -24,7 +24,7 @@ const New = () => {
   const [description, setDescription] = useState("");
 
   const [files, setFiles] = useState();
-  const [uploadSuccess, setUploadSuccess] = useState("");
+  const [submitted, setSubmitted] = useState("");
 
   const buildings = [
     { ALT: "Altschul Hall" },
@@ -99,9 +99,12 @@ const New = () => {
       response["data"]["imageUrls"].forEach((imageUrl, i) => {
         uploadFile(files[i], imageUrl);
       });
+      console.log(submission);
     } catch (error) {
       console.log(error);
     }
+    event.target.reset();
+    setSubmitted("You have successfully submitted a report!");
   };
 
   return (
@@ -173,6 +176,7 @@ const New = () => {
                   </Button>
                 </FormControl>
               </form>
+              {submitted === "" ? <></> : <div>{submitted}</div>}
             </Paper>
           }
         </Grid>
