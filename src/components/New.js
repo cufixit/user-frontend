@@ -20,43 +20,43 @@ const New = () => {
   const axios = require("axios").default;
 
   const [title, setTitle] = useState("");
-  const [location, setLocation] = useState("");
+  const [building, setBuilding] = useState("ALT");
   const [description, setDescription] = useState("");
 
   const [files, setFiles] = useState();
   const [uploadSuccess, setUploadSuccess] = useState("");
 
-  const locations = [
-    ("ALT", "Altschul Hall"),
-    ("AVH", "Avery Hall"),
-    ("BAR", "Barnard Hall"),
-    ("BUT", "Butler Library"),
-    ("BWY", "Broadway Residence Hall"),
-    ("DIA", "Diana Center"),
-    ("DOD", "Dodge Building"),
-    ("FLS", "Fairchild Life Sciences Building"),
-    ("HAM", "Hamilton Hall"),
-    ("IAB", "International Affairs Building"),
-    ("JRN", "Journalism Building"),
-    ("KNT", "Kent Hall"),
-    ("KNX", "Knox Hall"),
-    ("LEH", "Lehman Hall"),
-    ("LER", "Alfred Lerner Hall"),
-    ("LEW", "Lewisohn Hall"),
-    ("MAT", "Mathematics Building"),
-    ("MCY", "Macy Hall"),
-    ("MIL", "Milbank Hall, Barnard"),
-    ("MLC", "Milstein Center, Barnard"),
-    ("MUD", "Seeley W. Mudd Building"),
-    ("NWC", "Northwest Corner"),
-    ("PHI", "Philosophy Hall"),
-    ("PRN", "Prentis Hall"),
-    ("PUP", "Pupin Laboratories"),
-    ("SCEP", "Schapiro Center"),
-    ("SCH", "Schermerhorn Hall"),
-    ("SCHP", "Schapiro Residence Hall"),
-    ("URI", "Uris Hall"),
-    ("UTS", "Union Theological Seminary"),
+  const buildings = [
+    { ALT: "Altschul Hall" },
+    { AVH: "Avery Hall" },
+    { BAR: "Barnard Hall" },
+    { BUT: "Butler Library" },
+    { BWY: "Broadway Residence Hall" },
+    { DIA: "Diana Center" },
+    { DOD: "Dodge Building" },
+    { FLS: "Fairchild Life Sciences Building" },
+    { HAM: "Hamilton Hall" },
+    { IAB: "International Affairs Building" },
+    { JRN: "Journalism Building" },
+    { KNT: "Kent Hall" },
+    { KNX: "Knox Hall" },
+    { LEH: "Lehman Hall" },
+    { LER: "Alfred Lerner Hall" },
+    { LEW: "Lewisohn Hall" },
+    { MAT: "Mathematics Building" },
+    { MCY: "Macy Hall" },
+    { MIL: "Milbank Hall, Barnard" },
+    { MLC: "Milstein Center, Barnard" },
+    { MUD: "Seeley W. Mudd Building" },
+    { NWC: "Northwest Corner" },
+    { PHI: "Philosophy Hall" },
+    { PRN: "Prentis Hall" },
+    { PUP: "Pupin Laboratories" },
+    { SCEP: "Schapiro Center" },
+    { SCH: "Schermerhorn Hall" },
+    { SCHP: "Schapiro Residence Hall" },
+    { URI: "Uris Hall" },
+    { UTS: "Union Theological Seminary" },
   ];
 
   const uploadFile = async (file, imageUrl) => {
@@ -82,7 +82,7 @@ const New = () => {
 
     const submission = {
       title: title.trim(),
-      location: location,
+      building: building,
       description: description.trim(),
       images: files ? Array.from(files).map((file) => file.name) : [],
     };
@@ -126,14 +126,19 @@ const New = () => {
                       />
                       <TextField
                         select
-                        label="Location"
+                        label="Building"
                         defaultValue="Altschul Hall"
                         helperText="Select the location of the issue"
-                        onChange={(event) => setLocation(event.target.value)}
                       >
-                        {locations.map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
+                        {buildings.map((option) => (
+                          <MenuItem
+                            key={Object.keys(option)[0]}
+                            value={Object.values(option)[0]}
+                            onClick={(event) =>
+                              setBuilding(Object.keys(option)[0])
+                            }
+                          >
+                            {Object.values(option)[0]}
                           </MenuItem>
                         ))}
                       </TextField>
