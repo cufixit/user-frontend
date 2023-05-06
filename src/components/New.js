@@ -1,11 +1,18 @@
 import React, { useContext, useState } from "react";
-import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
 import { AccountContext } from "./AccountContext";
 import apigClient from "../ApigClient";
+import {
+  Button,
+  Container,
+  Divider,
+  FormControl,
+  Grid,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
 
 const New = () => {
   const { session } = useContext(AccountContext);
@@ -18,6 +25,39 @@ const New = () => {
 
   const [files, setFiles] = useState();
   const [uploadSuccess, setUploadSuccess] = useState("");
+
+  const locations = [
+    ("ALT", "Altschul Hall"),
+    ("AVH", "Avery Hall"),
+    ("BAR", "Barnard Hall"),
+    ("BUT", "Butler Library"),
+    ("BWY", "Broadway Residence Hall"),
+    ("DIA", "Diana Center"),
+    ("DOD", "Dodge Building"),
+    ("FLS", "Fairchild Life Sciences Building"),
+    ("HAM", "Hamilton Hall"),
+    ("IAB", "International Affairs Building"),
+    ("JRN", "Journalism Building"),
+    ("KNT", "Kent Hall"),
+    ("KNX", "Knox Hall"),
+    ("LEH", "Lehman Hall"),
+    ("LER", "Alfred Lerner Hall"),
+    ("LEW", "Lewisohn Hall"),
+    ("MAT", "Mathematics Building"),
+    ("MCY", "Macy Hall"),
+    ("MIL", "Milbank Hall, Barnard"),
+    ("MLC", "Milstein Center, Barnard"),
+    ("MUD", "Seeley W. Mudd Building"),
+    ("NWC", "Northwest Corner"),
+    ("PHI", "Philosophy Hall"),
+    ("PRN", "Prentis Hall"),
+    ("PUP", "Pupin Laboratories"),
+    ("SCEP", "Schapiro Center"),
+    ("SCH", "Schermerhorn Hall"),
+    ("SCHP", "Schapiro Residence Hall"),
+    ("URI", "Uris Hall"),
+    ("UTS", "Union Theological Seminary"),
+  ];
 
   const uploadFile = async (file, imageUrl) => {
     const formData = new FormData();
@@ -39,11 +79,6 @@ const New = () => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    if (files) {
-      setUploadSuccess("You have uploaded file(s).");
-    } else {
-      setUploadSuccess("No file has been uploaded.");
-    }
 
     const submission = {
       title: title.trim(),
@@ -70,62 +105,73 @@ const New = () => {
   };
 
   return (
-    <Container>
-      <h1>New Report</h1>
-      <Form onSubmit={onSubmit}>
-        <Row className="mb-3">
-          <Form.Group as={Col} controlId="issueTitle">
-            <Form.Label>Issue Title</Form.Label>
-            <Form.Control
-              type="title"
-              onChange={(event) => setTitle(event.target.value)}
-              placeholder="Enter issue title"
-              required
-            />
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="location">
-            <Form.Label>Location</Form.Label>
-            <Form.Select
-              defaultValue="Wien Hall"
-              onChange={(event) => setLocation(event.target.value)}
-            >
-              <option>Wien Hall</option>
-              <option>Broadway Hall</option>
-              <option>Mudd</option>
-            </Form.Select>
-          </Form.Group>
-        </Row>
-
-        <Row className="mb-3">
-          <Form.Group as={Col} controlId="description">
-            <Form.Label>Description</Form.Label>
-            <Form.Control
-              onChange={(event) => setDescription(event.target.value)}
-              as="textarea"
-              rows={3}
-              placeholder="Give a detailed description of what the issue is."
-            />
-          </Form.Group>
-        </Row>
-
-        <Row className="mb-3">
-          <Form.Group as={Col} controlId="imgs">
-            <Form.Label>Upload images</Form.Label>
-            <br />
-            <input
-              onChange={(event) => setFiles(event.target.files)}
-              type="file"
-              name="file"
-              multiple
-            />
-          </Form.Group>
-        </Row>
-        <div>{uploadSuccess}</div>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
+    <Container fixed sx={{ marginTop: "100px" }}>
+      <Grid container spacing={5}>
+        <Grid item xs={12} md={12} lg={12}>
+          {
+            <Paper sx={{ padding: "20px 30px 30px", marginBottom: "20px" }}>
+              <Typography variant="h5" marginBottom="10px">
+                New Report
+              </Typography>
+              <Divider sx={{ marginBottom: "25px" }} />
+              <form onSubmit={onSubmit}>
+                <FormControl fullWidth>
+                  <Stack spacing={4}>
+                    <div>
+                      <TextField
+                        label="Issue Title"
+                        sx={{ width: "60%", marginRight: "10%" }}
+                        required
+                        onChange={(event) => setTitle(event.target.value)}
+                      />
+                      <TextField
+                        select
+                        label="Location"
+                        defaultValue="Altschul Hall"
+                        helperText="Select the location of the issue"
+                        onChange={(event) => setLocation(event.target.value)}
+                      >
+                        {locations.map((option) => (
+                          <MenuItem key={option} value={option}>
+                            {option}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </div>
+                    <TextField
+                      label="Description"
+                      fullWidth
+                      required
+                      onChange={(event) => setDescription(event.target.value)}
+                    />
+                    <Button variant="outlined" component="label">
+                      Upload Files
+                      <input
+                        type="file"
+                        hidden
+                        onChange={(event) => setFiles(event.target.files)}
+                        multiple
+                      />
+                    </Button>
+                    {files === undefined ? (
+                      <></>
+                    ) : (
+                      <div>You have uploaded file(s).</div>
+                    )}
+                  </Stack>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{ marginTop: "30px", fontWeight: "800", width: "20%" }}
+                  >
+                    Submit Report
+                  </Button>
+                </FormControl>
+              </form>
+            </Paper>
+          }
+        </Grid>
+      </Grid>
     </Container>
   );
 };
