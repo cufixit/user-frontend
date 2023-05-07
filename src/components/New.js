@@ -100,11 +100,12 @@ const New = () => {
         uploadFile(files[i], imageUrl);
       });
       console.log(submission);
+      event.target.reset();
+      setSubmitted("You have successfully submitted a report!");
     } catch (error) {
       console.log(error);
+      setSubmitted("There was an error submitting your report.");
     }
-    event.target.reset();
-    setSubmitted("You have successfully submitted a report!");
   };
 
   return (
