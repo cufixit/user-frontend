@@ -12,12 +12,14 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 const Report = () => {
   const params = useParams();
   const { session } = useContext(AccountContext);
 
   const [report, setReport] = useState(null);
+  const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -34,6 +36,7 @@ const Report = () => {
       );
       console.log(response);
       setReport(response.data.report);
+      setImages(response.data.images);
       setLoading(false);
     } catch (error) {
       console.log(error.response.data);
@@ -53,7 +56,7 @@ const Report = () => {
       console.log(response);
       navigate("/reports");
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error.response);
     }
   };
 
@@ -62,7 +65,17 @@ const Report = () => {
   }, []);
 
   return loading ? (
-    ""
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      style={{ minHeight: "100vh" }}
+    >
+      Loading...
+      <RefreshIcon />
+    </Grid>
   ) : (
     <Container fixed sx={{ marginTop: "100px" }}>
       <Grid container spacing={5} justifyContent="center">
@@ -86,9 +99,11 @@ const Report = () => {
                   Date submitted: {report.createdDate}
                 </Typography>
               </Stack>
-              {/* {report.imageUrls?.map((url) => (
-                <img src={url} alt="image" key={url} />
-              ))} */}
+              <Container maxWidth="sm">
+                {images.map((url) => (
+                  <img width="50%" src={url} alt="image" key={url} />
+                ))}
+              </Container>
               <Button
                 type="submit"
                 variant="contained"

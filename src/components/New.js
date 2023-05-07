@@ -151,6 +151,7 @@ const New = () => {
                       label="Description"
                       fullWidth
                       required
+                      multiline
                       onChange={(event) => setDescription(event.target.value)}
                     />
                     <Button variant="outlined" component="label">
