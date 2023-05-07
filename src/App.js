@@ -9,6 +9,8 @@ import Status from "./components/Status";
 import Start from "./components/Start";
 import New from "./components/New";
 import Home from "./components/Home";
+import Reports from "./components/Reports";
+import Report from "./components/Report";
 import PrivateRoutes from "./components/PrivateRoutes";
 import PublicRoutes from "./components/PublicRoutes";
 
@@ -84,6 +86,8 @@ const App = () => {
             <Route element={<PrivateRoutes />}>
               <Route path="/home" element={<New />} />
               <Route path="/new" element={<New />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/reports/:id" element={<Report />} />
             </Route>
             <Route element={<PublicRoutes />}>
               <Route path="/" element={<Start />} />
