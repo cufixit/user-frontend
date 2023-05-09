@@ -1,14 +1,13 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import { AccountProvider } from "./components/AccountContext";
 import Status from "./components/Status";
 import Start from "./components/Start";
 import New from "./components/New";
-import Home from "./components/Home";
 import Reports from "./components/Reports";
 import Report from "./components/Report";
 import PrivateRoutes from "./components/PrivateRoutes";

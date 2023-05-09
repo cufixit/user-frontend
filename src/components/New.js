@@ -2,17 +2,20 @@ import React, { useContext, useState } from "react";
 import { AccountContext } from "./AccountContext";
 import apigClient from "../ApigClient";
 import {
+  Box,
   Button,
   Container,
-  Divider,
   FormControl,
   Grid,
   Paper,
   Stack,
+  Select,
+  InputLabel,
   TextField,
   Typography,
 } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
+import { BUILDINGS } from "../constants";
 
 const New = () => {
   const { session } = useContext(AccountContext);
@@ -20,44 +23,11 @@ const New = () => {
   const axios = require("axios").default;
 
   const [title, setTitle] = useState("");
-  const [building, setBuilding] = useState("ALT");
+  const [building, setBuilding] = useState(null);
   const [description, setDescription] = useState("");
 
   const [files, setFiles] = useState();
   const [submitted, setSubmitted] = useState("");
-
-  const buildings = [
-    { ALT: "Altschul Hall" },
-    { AVH: "Avery Hall" },
-    { BAR: "Barnard Hall" },
-    { BUT: "Butler Library" },
-    { BWY: "Broadway Residence Hall" },
-    { DIA: "Diana Center" },
-    { DOD: "Dodge Building" },
-    { FLS: "Fairchild Life Sciences Building" },
-    { HAM: "Hamilton Hall" },
-    { IAB: "International Affairs Building" },
-    { JRN: "Journalism Building" },
-    { KNT: "Kent Hall" },
-    { KNX: "Knox Hall" },
-    { LEH: "Lehman Hall" },
-    { LER: "Alfred Lerner Hall" },
-    { LEW: "Lewisohn Hall" },
-    { MAT: "Mathematics Building" },
-    { MCY: "Macy Hall" },
-    { MIL: "Milbank Hall, Barnard" },
-    { MLC: "Milstein Center, Barnard" },
-    { MUD: "Seeley W. Mudd Building" },
-    { NWC: "Northwest Corner" },
-    { PHI: "Philosophy Hall" },
-    { PRN: "Prentis Hall" },
-    { PUP: "Pupin Laboratories" },
-    { SCEP: "Schapiro Center" },
-    { SCH: "Schermerhorn Hall" },
-    { SCHP: "Schapiro Residence Hall" },
-    { URI: "Uris Hall" },
-    { UTS: "Union Theological Seminary" },
-  ];
 
   const uploadFile = async (file, imageUrl) => {
     const formData = new FormData();
@@ -113,72 +83,74 @@ const New = () => {
       <Grid container spacing={5}>
         <Grid item xs={12} md={12} lg={12}>
           {
-            <Paper sx={{ padding: "20px 30px 30px", marginBottom: "20px" }}>
-              <Typography variant="h5" marginBottom="10px">
+            <Paper sx={{ padding: 5 }}>
+              <Typography variant="h4" marginBottom={3}>
                 New Report
               </Typography>
-              <Divider sx={{ marginBottom: "25px" }} />
-              <form onSubmit={onSubmit}>
-                <FormControl fullWidth>
-                  <Stack spacing={4}>
-                    <div>
+              <Box component="form" onSubmit={onSubmit}>
+                <Stack spacing={2}>
+                  <Stack direction="row" spacing={2}>
+                    <FormControl fullWidth>
                       <TextField
                         label="Issue Title"
-                        sx={{ width: "60%", marginRight: "10%" }}
                         required
                         onChange={(event) => setTitle(event.target.value)}
                       />
-                      <TextField
-                        select
+                    </FormControl>
+                    <FormControl fullWidth>
+                      <InputLabel required>Building</InputLabel>
+                      <Select
+                        value={building}
                         label="Building"
-                        defaultValue="Altschul Hall"
-                        helperText="Select the location of the issue"
+                        required
+                        onChange={(event) => {
+                          setBuilding(event.target.value);
+                        }}
                       >
-                        {buildings.map((option) => (
-                          <MenuItem
-                            key={Object.keys(option)[0]}
-                            value={Object.values(option)[0]}
-                            onClick={(event) =>
-                              setBuilding(Object.keys(option)[0])
-                            }
-                          >
-                            {Object.values(option)[0]}
+                        {Object.entries(BUILDINGS).map(([k, v]) => (
+                          <MenuItem key={k} value={k}>
+                            {v}
                           </MenuItem>
                         ))}
-                      </TextField>
-                    </div>
+                      </Select>
+                    </FormControl>
+                  </Stack>
+                  <FormControl fullWidth>
                     <TextField
                       label="Description"
                       fullWidth
                       required
                       multiline
+                      rows={4}
+                      type="text"
                       onChange={(event) => setDescription(event.target.value)}
                     />
-                    <Button variant="outlined" component="label">
-                      Upload Files
-                      <input
-                        type="file"
-                        hidden
-                        onChange={(event) => setFiles(event.target.files)}
-                        multiple
-                      />
-                    </Button>
-                    {files === undefined ? (
-                      <></>
-                    ) : (
-                      <div>You have uploaded file(s).</div>
-                    )}
-                  </Stack>
+                  </FormControl>
+                  <Button variant="outlined" size="large" component="label">
+                    Upload Photos
+                    <input
+                      type="file"
+                      hidden
+                      onChange={(event) => setFiles(event.target.files)}
+                      multiple
+                    />
+                  </Button>
+                  {files !== undefined &&
+                    files.length >
+                      0(
+                        <div>{`You have uploaded ${files.length} photo(s).`}</div>
+                      )}
                   <Button
                     type="submit"
                     variant="contained"
-                    sx={{ marginTop: "30px", fontWeight: "800", width: "20%" }}
+                    size="large"
+                    sx={{ marginTop: "30px", fontWeight: "800" }}
                   >
                     Submit Report
                   </Button>
-                </FormControl>
-              </form>
-              {submitted === "" ? <></> : <div>{submitted}</div>}
+                </Stack>
+              </Box>
+              {/* {submitted === "" ? <></> : <div>{submitted}</div>} */}
             </Paper>
           }
         </Grid>
