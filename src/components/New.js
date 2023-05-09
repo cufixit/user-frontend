@@ -135,11 +135,9 @@ const New = () => {
                       multiple
                     />
                   </Button>
-                  {files !== undefined &&
-                    files.length >
-                      0(
-                        <div>{`You have uploaded ${files.length} photo(s).`}</div>
-                      )}
+                  {files !== undefined && files.length > 0 && (
+                    <div>{`You have uploaded ${files.length} photo(s).`}</div>
+                  )}
                   <Button
                     type="submit"
                     variant="contained"
